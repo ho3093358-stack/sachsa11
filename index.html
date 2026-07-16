@@ -94,12 +94,68 @@
         button.btn-orange:hover { background-color: #bf360c; }
         
         /* Modal QR code */
-        .qr-box { text-align: center; margin-top: 15px; }
-        .qr-box img { max-width: 220px; border-radius: 10px; border: 4px solid #fff; }
-        .status-pulse {
+        .qr-box { text-align: center; margin-top: 10px; }
+        .qr-box img { max-width: 200px; border-radius: 10px; border: 4px solid #fff; }
+        
+        /* Bảng chi tiết thông tin chuyển khoản */
+        .transfer-details {
             margin-top: 15px;
+            background: #222;
+            border-radius: 8px;
+            padding: 12px;
+            text-align: left;
+            border: 1px solid #444;
+        }
+        .transfer-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
             font-size: 14px;
+        }
+        .transfer-row:last-child { margin-bottom: 0; }
+        .transfer-label { color: #aaa; }
+        .transfer-value { font-weight: bold; color: #fff; }
+        .btn-copy-small {
+            background: #444;
+            color: #2ea44f;
+            border: none;
+            padding: 3px 8px;
+            font-size: 11px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-left: 8px;
+            font-weight: bold;
+        }
+        .btn-copy-small:hover {
+            background: #2ea44f;
+            color: #fff;
+        }
+        
+        /* Nút xác nhận chuyển tiền chủ động */
+        .btn-confirm-payment {
+            background-color: #0288d1;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            font-size: 14px;
+            font-weight: bold;
+            border-radius: 6px;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 15px;
+            transition: background 0.2s;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+        }
+        .btn-confirm-payment:hover {
+            background-color: #01579b;
+        }
+        
+        .status-pulse {
+            margin-top: 12px;
+            font-size: 13px;
             color: #e65100;
+            text-align: center;
             animation: pulse 1.5s infinite;
         }
         @keyframes pulse {
@@ -119,7 +175,7 @@
         <!-- Gói 1 Tháng -->
         <div class="card">
             <div>
-                <h3>Gói 1 Tuần VIP</h3>
+                <h3>Gói 1 Tháng VIP</h3>
                 <div class="price">50.000đ</div>
                 <ul class="features">
                     <li>30 Ngày sử dụng đầy đủ</li>
@@ -128,13 +184,13 @@
                     <li>Tốc độ đọc siêu nhanh</li>
                 </ul>
             </div>
-            <button class="btn-buy" onclick="createPayment(50000, 30)">Mua Ngay 🚀</button>
+            <button class="btn-buy" onclick="createPayment(50000, 'MBBank (Quân Đội)', 30)">Mua Ngay 🚀</button>
         </div>
 
         <!-- Gói 3 Tháng -->
         <div class="card popular">
             <div>
-                <h3>Gói 1 Tháng VIP</h3>
+                <h3>Gói 3 Tháng VIP</h3>
                 <div class="price">200.000đ</div>
                 <ul class="features">
                     <li>90 Ngày sử dụng đầy đủ</li>
@@ -143,7 +199,7 @@
                     <li>Hỗ trợ nâng cấp, sửa lỗi 24/7</li>
                 </ul>
             </div>
-            <button class="btn-buy btn-orange" onclick="createPayment(200000, 90)">Mua Ngay 🔥</button>
+            <button class="btn-buy btn-orange" onclick="createPayment(200000, 'MBBank (Quân Đội)', 90)">Mua Ngay 🔥</button>
         </div>
 
         <!-- Gói Vĩnh Viễn -->
@@ -158,96 +214,195 @@
                     <li>Hỗ trợ trực tiếp qua Ultraview</li>
                 </ul>
             </div>
-            <button class="btn-buy" onclick="createPayment(599000, 9999)">Mua Ngay 👑</button>
+            <button class="btn-buy" onclick="createPayment(599000, 'MBBank (Quân Đội)', 9999)">Mua Ngay 👑</button>
         </div>
     </div>
 </div>
 
 <script>
-    // Điền cấu hình tài khoản SePay của bạn ở đây
-    const BANK_BIN = "970422"; // Mã BIN ngân hàng (Ví dụ VietinBank là 970415)
+    // Cấu hình tài khoản SePay của bạn
+    const BANK_BIN = "970422"; // Mã BIN MBBank
     const ACCOUNT_NO = "05165917641234"; // Số tài khoản ngân hàng nhận tiền
-const ACCOUNT_NAME = "HO MINH PHUONG"; // Tên chủ tài khoản (Không dấu)
+    const ACCOUNT_NAME = "HO MINH PHUONG"; // Tên chủ tài khoản
     
     // Đường dẫn Web App Apps Script của bạn
-    const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbxf2E4cRIzEUtQ1gzpTiGRgAyx-uSfvvCZugEZgVQXTldceILDReXgDLHV6_OGOs2Zq/exec";
+    const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbx3Yv1JRktymJhpy8atuQRzF8d7EtONdkVlLwXouZwovrwzqvwmQaJ0MqfFuq_9nHix/exec";
 
+    // Hàm phụ sao chép nhanh
+    window.copyToClipboard = function(text, elementId) {
+        navigator.clipboard.writeText(text).then(() => {
+            const btn = document.getElementById(elementId);
+            if (btn) {
+                const originalText = btn.innerText;
+                btn.innerText = "Đã copy ✓";
+                btn.style.background = "#2ea44f";
+                btn.style.color = "#fff";
+                setTimeout(() => {
+                    btn.innerText = originalText;
+                    btn.style.background = "#444";
+                    btn.style.color = "#2ea44f";
+                }, 1500);
+            }
+        });
+    }
+
+    // Tạo Memo ngẫu nhiên bảo mật dạng KEY-DAYS-XXXXX
     function generateRandomMemo(days) {
-        // Tạo một chuỗi ngẫu nhiên dài 5 ký tự để tránh trùng giao dịch
         const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
         let randomStr = '';
         for (let i = 0; i < 5; i++) {
             randomStr += chars.charAt(Math.floor(Math.random() * chars.length));
         }
-        // Định dạng Memo: KEY_[Số Ngày]_[Mã Ngẫu Nhiên] -> Ví dụ: KEY_30_A9FD3
-        return `KEY_${days}_${randomStr}`;
+        return `KEY-${days}-${randomStr}`;
     }
 
-    function createPayment(amount, days) {
+    function createPayment(amount, bankName, days) {
         const memo = generateRandomMemo(days);
-        // Tạo link QR từ SePay API mở
-        const qrUrl = `https://qr.sepay.vn/img?acc=${ACCOUNT_NO}&bank=${BANK_BIN}&amount=${amount}&memo=${memo}&template=compact`;
+        const qrUrl = `https://qr.sepay.vn/img?acc=${ACCOUNT_NO}&bank=${BANK_BIN}&amount=${amount}&des=${memo}&template=compact`;
 
         Swal.fire({
             title: 'QUÉT MÃ ĐỂ MUA KEY',
             html: `
                 <div class="qr-box">
-                    <img src="${qrUrl}" alt="Mã QR Chuyển khoản">
-                    <p style="margin-top:10px; font-weight:bold; color:#ffeb3b;">Nội dung bắt buộc ghi đúng:</p>
-                    <p style="font-size: 18px; color: #2ea44f; font-weight: bold; background: #333; padding: 8px; border-radius: 5px; display:inline-block;">${memo}</p>
-                    <p style="color:#aaa; font-size:12px; margin-top:5px;">Hệ thống sẽ tự động gửi key ngay khi nhận được tiền.</p>
-                    <div class="status-pulse">🔄 Đang chờ hệ thống kiểm tra tiền chuyển khoản...</div>
+                    <img src="${qrUrl}" alt="Mã QR Chuyển khoản tự động">
+                    <p style="color:#2ea44f; font-size:11px; margin-top:5px; font-weight: bold;">✓ Hệ thống tự động điền số tiền & nội dung khi quét.</p>
+                    
+                    <div class="transfer-details">
+                        <div class="transfer-row">
+                            <span class="transfer-label">Ngân hàng:</span>
+                            <span class="transfer-value">${bankName}</span>
+                        </div>
+                        <div class="transfer-row">
+                            <span class="transfer-label">Số tài khoản:</span>
+                            <span class="transfer-value">
+                                ${ACCOUNT_NO}
+                                <button id="btn-copy-acc" class="btn-copy-small" onclick="copyToClipboard('${ACCOUNT_NO}', 'btn-copy-acc')">Copy</button>
+                            </span>
+                        </div>
+                        <div class="transfer-row">
+                            <span class="transfer-label">Chủ tài khoản:</span>
+                            <span class="transfer-value">${ACCOUNT_NAME}</span>
+                        </div>
+                        <div class="transfer-row">
+                            <span class="transfer-label">Số tiền:</span>
+                            <span class="transfer-value" style="color: #2ea44f;">
+                                ${amount.toLocaleString('vi-VN')}đ
+                                <button id="btn-copy-amount" class="btn-copy-small" onclick="copyToClipboard('${amount}', 'btn-copy-amount')">Copy</button>
+                            </span>
+                        </div>
+                        <div class="transfer-row" style="background: #333; padding: 6px; border-radius: 4px; margin-top: 5px;">
+                            <span class="transfer-label" style="color:#ffeb3b; font-weight:bold;">Nội dung CK:</span>
+                            <span class="transfer-value" style="color:#ffeb3b; font-size: 15px;">
+                                ${memo}
+                                <button id="btn-copy-memo" class="btn-copy-small" style="color: #ffeb3b; border-color: #ffeb3b;" onclick="copyToClipboard('${memo}', 'btn-copy-memo')">Copy</button>
+                            </span>
+                        </div>
+                    </div>
+                    
+                    <!-- Nút xác nhận chuyển khoản chủ động -->
+                    <button class="btn-confirm-payment" onclick="manualCheckPayment('${memo}')">🙋‍♂️ Tôi đã chuyển tiền thành công</button>
+                    
+                    <div class="status-pulse" id="status-text">🔄 Hệ thống đang chờ tiền vào để tự động gửi Key...</div>
                 </div>
             `,
             showCancelButton: true,
             cancelButtonText: 'Hủy Giao Dịch',
             allowOutsideClick: false,
             didOpen: () => {
-                // Bắt đầu vòng lặp kiểm tra (polling) xem Key đã được tạo chưa
                 startCheckingPayment(memo);
+            },
+            willClose: () => {
+                if (checkInterval) clearInterval(checkInterval);
             }
         });
     }
 
     let checkInterval;
+    // Hàm chạy quét tự động ngầm định kỳ mỗi 5s
     function startCheckingPayment(memo) {
         if (checkInterval) clearInterval(checkInterval);
-
         checkInterval = setInterval(() => {
-            // Gửi yêu cầu lên Apps Script để kiểm tra xem Memo này đã tạo Key chưa
-            fetch(WEB_APP_URL, {
-                method: "POST",
-                body: JSON.stringify({
-                    action: "check_purchased_key",
-                    memo: memo
-                })
+            silentCheckPayment(memo);
+        }, 5000);
+    }
+
+    // Hàm check ngầm tự động
+    function silentCheckPayment(memo) {
+        fetch(WEB_APP_URL, {
+            method: "POST",
+            body: JSON.stringify({
+                action: "check_purchased_key",
+                memo: memo
             })
-            .then(res => res.json())
-            .then(data => {
-                if (data.status === "success" && data.license_key) {
-                    clearInterval(checkInterval);
-                    
-                    // Hiển thị Key bản quyền trực quan cho khách copy
-                    Swal.fire({
-                        icon: 'success',
-                        title: 'MUA KEY THÀNH CÔNG! 🎉',
-                        html: `
-                            <p>Cảm ơn bạn đã ủng hộ chúng tôi. Đây là mã Key bản quyền của bạn:</p>
-                            <div style="background:#222; color:#2ea44f; font-size:20px; font-weight:bold; padding:15px; border-radius:8px; border:1px dashed #2ea44f; margin:15px 0; word-break:break-all;">
-                                ${data.license_key}
-                            </div>
-                            <p style="font-size:12px; color:#aaa;">Hãy copy key này và dán vào phần mềm để kích hoạt VIP ngay nhé!</p>
-                        `,
-                        confirmButtonText: 'Copy Key Bản Quyền',
-                        allowOutsideClick: false
-                    }).then(() => {
-                        navigator.clipboard.writeText(data.license_key);
-                        Swal.fire('Đã Copy!', 'Key đã được lưu vào khay nhớ tạm.', 'success');
-                    });
-                }
+        })
+        .then(res => res.json())
+        .then(data => {
+            if (data.status === "success" && data.license_key) {
+                handlePaymentSuccess(data.license_key);
+            }
+        })
+        .catch(err => console.log("Lỗi check payment: ", err));
+    }
+
+    // Hàm gọi thủ công khi khách nhấn nút "Tôi đã chuyển tiền"
+    window.manualCheckPayment = function(memo) {
+        const statusText = document.getElementById("status-text");
+        if (statusText) {
+            statusText.innerText = "⏳ Đang kết nối ngân hàng để đối soát giao dịch...";
+            statusText.style.color = "#0288d1";
+        }
+
+        fetch(WEB_APP_URL, {
+            method: "POST",
+            body: JSON.stringify({
+                action: "check_purchased_key",
+                memo: memo
             })
-            .catch(err => console.log("Lỗi check payment: ", err));
-        }, 5000); // 5 giây kiểm tra 1 lần
+        })
+        .then(res => res.json())
+        .then(data => {
+            if (data.status === "success" && data.license_key) {
+                handlePaymentSuccess(data.license_key);
+            } else {
+                // Nếu chưa thấy tiền vào, báo cho khách hàng biết
+                Swal.showValidationMessage('Hệ thống chưa nhận được tiền. Có thể ngân hàng xử lý chậm 1-2 phút, bạn vui lòng đợi chút rồi bấm lại nhé!');
+                setTimeout(() => {
+                    if (statusText) {
+                        statusText.innerText = "🔄 Hệ thống đang chờ tiền vào để tự động gửi Key...";
+                        statusText.style.color = "#e65100";
+                    }
+                }, 3000);
+            }
+        })
+        .catch(err => {
+            console.error(err);
+            if (statusText) {
+                statusText.innerText = "❌ Lỗi kết nối hệ thống. Vui lòng thử lại sau.";
+                statusText.style.color = "#d32f2f";
+            }
+        });
+    }
+
+    // Hàm xử lý khi xác nhận thanh toán thành công
+    function handlePaymentSuccess(key) {
+        if (checkInterval) clearInterval(checkInterval);
+        
+        Swal.fire({
+            icon: 'success',
+            title: 'MUA KEY THÀNH CÔNG! 🎉',
+            html: `
+                <p>Cảm ơn bạn đã ủng hộ chúng tôi. Đây là mã Key bản quyền của bạn:</p>
+                <div style="background:#222; color:#2ea44f; font-size:20px; font-weight:bold; padding:15px; border-radius:8px; border:1px dashed #2ea44f; margin:15px 0; word-break:break-all;">
+                    ${key}
+                </div>
+                <p style="font-size:12px; color:#aaa;">Hãy copy key này và dán vào phần mềm để kích hoạt VIP ngay nhé!</p>
+            `,
+            confirmButtonText: 'Copy Key Bản Quyền',
+            allowOutsideClick: false
+        }).then(() => {
+            navigator.clipboard.writeText(key);
+            Swal.fire('Đã Copy!', 'Key đã được lưu vào khay nhớ tạm.', 'success');
+        });
     }
 </script>
 </body>
