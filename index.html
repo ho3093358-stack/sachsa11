@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VietVoice AI - Mua Key Bản Quyền VIP</title>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <style>
+        :root {
+            --primary-color: #2ea44f;
+            --dark-bg: #1a1a1a;
+            --card-bg: #2d2d2d;
+            --text-color: #ffffff;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--dark-bg);
+            color: var(--text-color);
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+        }
+        .container {
+            max-width: 1000px;
+            width: 90%;
+            text-align: center;
+            padding: 20px;
+        }
+        h1 { margin-bottom: 5px; color: var(--primary-color); }
+        p.subtitle { color: #aaa; margin-bottom: 40px; }
+        
+        .pricing-table {
+            display: flex;
+            justify-content: center;
+            gap: 25px;
+            flex-wrap: wrap;
+        }
+        .card {
+            background-color: var(--card-bg);
+            border-radius: 15px;
+            padding: 30px;
+            width: 260px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+            transition: transform 0.3s ease;
+            border: 1px solid #444;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        .card:hover {
+            transform: translateY(-10px);
+            border-color: var(--primary-color);
+        }
+        .card.popular {
+            border: 2px solid #e65100;
+            position: relative;
+        }
+        .card.popular::before {
+            content: "BÁN CHẠY";
+            position: absolute;
+            top: -12px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #e65100;
+            padding: 3px 15px;
+            font-size: 11px;
+            font-weight: bold;
+            border-radius: 10px;
+        }
+        .card h3 { margin-top: 0; font-size: 20px; }
+        .price { font-size: 28px; font-weight: bold; margin: 20px 0; color: #2ea44f; }
+        .features { list-style: none; padding: 0; text-align: left; margin-bottom: 25px; }
+        .features li { margin: 10px 0; font-size: 14px; color: #ccc; }
+        .features li::before { content: "✓ "; color: var(--primary-color); }
+        
+        button.btn-buy {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 8px;
+            font-size: 15px;
+            font-weight: bold;
+            cursor: pointer;
+            width: 100%;
+            transition: background 0.2s;
+        }
+        button.btn-buy:hover { background-color: #23823e; }
+        button.btn-orange { background-color: #e65100; }
+        button.btn-orange:hover { background-color: #bf360c; }
+        
+        /* Modal QR code */
+        .qr-box { text-align: center; margin-top: 15px; }
+        .qr-box img { max-width: 220px; border-radius: 10px; border: 4px solid #fff; }
+        .status-pulse {
+            margin-top: 15px;
+            font-size: 14px;
+            color: #e65100;
+            animation: pulse 1.5s infinite;
+        }
+        @keyframes pulse {
+            0% { opacity: 0.5; }
+            50% { opacity: 1; }
+            100% { opacity: 0.5; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>🔑 MUA KEY BẢN QUYỀN VIETVOICE AI</h1>
+    <p class="subtitle">Kích hoạt tài khoản VIP cực kỳ đơn giản qua hình thức thanh toán QR chuyển khoản tự động 24/7</p>
+    
+    <div class="pricing-table">
+        <!-- Gói 1 Tháng -->
+        <div class="card">
+            <div>
+                <h3>Gói 1 Tuần VIP</h3>
+                <div class="price">50.000đ</div>
+                <ul class="features">
+                    <li>30 Ngày sử dụng đầy đủ</li>
+                    <li>Không giới hạn ký tự đọc</li>
+                    <li>Sử dụng mọi giọng AI Premium</li>
+                    <li>Tốc độ đọc siêu nhanh</li>
+                </ul>
+            </div>
+            <button class="btn-buy" onclick="createPayment(50000, 30)">Mua Ngay 🚀</button>
+        </div>
+
+        <!-- Gói 3 Tháng -->
+        <div class="card popular">
+            <div>
+                <h3>Gói 1 Tháng VIP</h3>
+                <div class="price">200.000đ</div>
+                <ul class="features">
+                    <li>90 Ngày sử dụng đầy đủ</li>
+                    <li>Tiết kiệm 20% chi phí</li>
+                    <li>Sử dụng mọi giọng AI Premium</li>
+                    <li>Hỗ trợ nâng cấp, sửa lỗi 24/7</li>
+                </ul>
+            </div>
+            <button class="btn-buy btn-orange" onclick="createPayment(200000, 90)">Mua Ngay 🔥</button>
+        </div>
+
+        <!-- Gói Vĩnh Viễn -->
+        <div class="card">
+            <div>
+                <h3>Gói Trọn Đời VIP</h3>
+                <div class="price">599.000đ</div>
+                <ul class="features">
+                    <li>Sử dụng Vĩnh Viễn</li>
+                    <li>Không cần gia hạn thêm</li>
+                    <li>Tặng kèm các tính năng mới</li>
+                    <li>Hỗ trợ trực tiếp qua Ultraview</li>
+                </ul>
+            </div>
+            <button class="btn-buy" onclick="createPayment(599000, 9999)">Mua Ngay 👑</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Điền cấu hình tài khoản SePay của bạn ở đây
+    const BANK_BIN = "970422"; // Mã BIN ngân hàng (Ví dụ VietinBank là 970415)
+    const ACCOUNT_NO = "05165917641234"; // Số tài khoản ngân hàng nhận tiền
+const ACCOUNT_NAME = "HO MINH PHUONG"; // Tên chủ tài khoản (Không dấu)
+    
+    // Đường dẫn Web App Apps Script của bạn
+    const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbwUTMe3k3qaA_Z6zIRU8_dvP0Lnhy2eYTvcb5qXOGvOPZlNjyn95-j9w4proLucpfKZ/exec";
+
+    function generateRandomMemo(days) {
+        // Tạo một chuỗi ngẫu nhiên dài 5 ký tự để tránh trùng giao dịch
+        const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+        let randomStr = '';
+        for (let i = 0; i < 5; i++) {
+            randomStr += chars.charAt(Math.floor(Math.random() * chars.length));
+        }
+        // Định dạng Memo: KEY_[Số Ngày]_[Mã Ngẫu Nhiên] -> Ví dụ: KEY_30_A9FD3
+        return `KEY_${days}_${randomStr}`;
+    }
+
+    function createPayment(amount, days) {
+        const memo = generateRandomMemo(days);
+        // Tạo link QR từ SePay API mở
+        const qrUrl = `https://qr.sepay.vn/img?acc=${ACCOUNT_NO}&bank=${BANK_BIN}&amount=${amount}&memo=${memo}&template=compact`;
+
+        Swal.fire({
+            title: 'QUÉT MÃ ĐỂ MUA KEY',
+            html: `
+                <div class="qr-box">
+                    <img src="${qrUrl}" alt="Mã QR Chuyển khoản">
+                    <p style="margin-top:10px; font-weight:bold; color:#ffeb3b;">Nội dung bắt buộc ghi đúng:</p>
+                    <p style="font-size: 18px; color: #2ea44f; font-weight: bold; background: #333; padding: 8px; border-radius: 5px; display:inline-block;">${memo}</p>
+                    <p style="color:#aaa; font-size:12px; margin-top:5px;">Hệ thống sẽ tự động gửi key ngay khi nhận được tiền.</p>
+                    <div class="status-pulse">🔄 Đang chờ hệ thống kiểm tra tiền chuyển khoản...</div>
+                </div>
+            `,
+            showCancelButton: true,
+            cancelButtonText: 'Hủy Giao Dịch',
+            allowOutsideClick: false,
+            didOpen: () => {
+                // Bắt đầu vòng lặp kiểm tra (polling) xem Key đã được tạo chưa
+                startCheckingPayment(memo);
+            }
+        });
+    }
+
+    let checkInterval;
+    function startCheckingPayment(memo) {
+        if (checkInterval) clearInterval(checkInterval);
+
+        checkInterval = setInterval(() => {
+            // Gửi yêu cầu lên Apps Script để kiểm tra xem Memo này đã tạo Key chưa
+            fetch(WEB_APP_URL, {
+                method: "POST",
+                body: JSON.stringify({
+                    action: "check_purchased_key",
+                    memo: memo
+                })
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.status === "success" && data.license_key) {
+                    clearInterval(checkInterval);
+                    
+                    // Hiển thị Key bản quyền trực quan cho khách copy
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'MUA KEY THÀNH CÔNG! 🎉',
+                        html: `
+                            <p>Cảm ơn bạn đã ủng hộ chúng tôi. Đây là mã Key bản quyền của bạn:</p>
+                            <div style="background:#222; color:#2ea44f; font-size:20px; font-weight:bold; padding:15px; border-radius:8px; border:1px dashed #2ea44f; margin:15px 0; word-break:break-all;">
+                                ${data.license_key}
+                            </div>
+                            <p style="font-size:12px; color:#aaa;">Hãy copy key này và dán vào phần mềm để kích hoạt VIP ngay nhé!</p>
+                        `,
+                        confirmButtonText: 'Copy Key Bản Quyền',
+                        allowOutsideClick: false
+                    }).then(() => {
+                        navigator.clipboard.writeText(data.license_key);
+                        Swal.fire('Đã Copy!', 'Key đã được lưu vào khay nhớ tạm.', 'success');
+                    });
+                }
+            })
+            .catch(err => console.log("Lỗi check payment: ", err));
+        }, 5000); // 5 giây kiểm tra 1 lần
+    }
+</script>
+</body>
+</html>
